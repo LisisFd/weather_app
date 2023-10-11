@@ -17,9 +17,13 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
             WeatherFactory(APIKEY, language: Language.ENGLISH);
 
         Position position = await _determinePosition();
-        Weather weather = await weatherFactory.currentWeatherByLocation(
-            position.latitude, position.longitude);
-        emit(WeatherSuccess(weather));
+        double latitude = position.latitude;
+        double longitude = position.longitude;
+        Weather weather =
+            await weatherFactory.currentWeatherByLocation(latitude, longitude);
+        List<Weather> weathers =
+            await weatherFactory.fiveDayForecastByLocation(latitude, longitude);
+        emit(WeatherSuccess(weather, weathers));
       } catch (e) {
         emit(WeatherFailure());
       }
