@@ -3,11 +3,12 @@ import 'dart:ui';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 
-///TODO: add localize, local provider.Theme provider. Setup repo. Weather view, second screen scroll
+///TODO: add localize, local provider.Theme provider. Setup repo.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -22,6 +23,8 @@ class _HomeScreenState extends State<HomeScreen> {
   final ScrollController _controller = ScrollController();
   double _scale = 1;
   double _opacity = 1;
+  bool _scrollStart = false;
+  final GlobalKey _fiveDaysKey = GlobalKey();
 
   @override
   void initState() {
@@ -42,6 +45,29 @@ class _HomeScreenState extends State<HomeScreen> {
     });
 
     super.initState();
+  }
+
+  void _onEndScroll(ScrollMetrics metrics) async {
+    if (_scale <= 0) return;
+    bool forward =
+        _controller.position.userScrollDirection == ScrollDirection.forward;
+    setState(() {
+      _scrollStart = true;
+    });
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      BuildContext? currentContext = _fiveDaysKey.currentContext;
+      RenderBox renderBox = currentContext?.findRenderObject() as RenderBox;
+      double position = 0.0;
+      if (!forward) {
+        position = renderBox.globalToLocal(Offset.zero).dy * -1;
+      }
+      await _controller.animateTo(position,
+          duration: const Duration(milliseconds: 300), curve: Curves.linear);
+      setState(() {
+        _scrollStart = false;
+      });
+    });
   }
 
   Widget _successState(BuildContext context, WeatherSuccess state) {
@@ -96,31 +122,38 @@ class _HomeScreenState extends State<HomeScreen> {
         )
         .toList();
 
-    return SingleChildScrollView(
-      controller: _controller,
-      clipBehavior: Clip.none,
-      child: Column(
-        children: [
-          Opacity(
-            opacity: _opacity,
-            child: Transform.scale(
-              alignment: Alignment.bottomCenter,
-              scale: _scale,
-              child: SizedBox(
-                height: MediaQuery.of(context).size.height,
-                child: MainWeatherWidget(
-                  weather: weather,
+    return NotificationListener<ScrollNotification>(
+      onNotification: (scrollNotification) {
+        if (scrollNotification is ScrollEndNotification) {
+          if (!_scrollStart) {
+            _onEndScroll(scrollNotification.metrics);
+          }
+        }
+        return true;
+      },
+      child: SingleChildScrollView(
+        controller: _controller,
+        child: Column(
+          children: [
+            Opacity(
+              opacity: _opacity,
+              child: Transform.scale(
+                alignment: Alignment.bottomCenter,
+                scale: _scale,
+                child: SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: MainWeatherWidget(
+                    weather: weather,
+                  ),
                 ),
               ),
             ),
-          ),
-          Column(
-              // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                //
-                ...daysWidgets,
-              ])
-        ],
+            Column(key: _fiveDaysKey, children: [
+              //
+              ...daysWidgets,
+            ])
+          ],
+        ),
       ),
     );
   }
