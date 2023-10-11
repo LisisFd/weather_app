@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+class BlurColors {
+  final Color first;
+  final Color second;
+  const BlurColors({required this.first, required this.second});
+}
+
 abstract interface class ITheme {
   final Brightness brightness;
 
   ITheme({required this.brightness});
   ThemeData getTheme();
+  BlurColors getBlur();
 }
 
 abstract base class BaseTheme extends ITheme {
@@ -45,5 +52,6 @@ abstract base class BaseTheme extends ITheme {
           fontWeight: FontWeight.w300,
         ),
         bodyLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.w700),
+        bodyMedium: TextStyle(color: Colors.white, fontSize: 15),
       );
 }

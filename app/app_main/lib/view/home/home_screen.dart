@@ -9,7 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
 
-///TODO: add localize, local provider.Theme provider. Setup repo.
+///TODO: Theme provider. Setup repo.
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -50,6 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   void _onEndScroll(ScrollMetrics metrics) async {
     if (_scale <= 0) return;
+
     bool forward =
         _controller.position.userScrollDirection == ScrollDirection.forward;
     setState(() {
@@ -72,6 +73,7 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _successState(BuildContext context, WeatherSuccess state) {
+    final ThemeData theme = Theme.of(context);
     final Weather weather = state.weather;
     final List<Weather> fiveDays = state.fiveDays;
     final List<_DateListModel> models = _getWeathers(fiveDays);
@@ -84,11 +86,18 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               padding,
               ExpansionTile(
-                title: Text(m.title),
+                title: Text(
+                  m.title,
+                  style: theme.textTheme.bodyLarge,
+                ),
                 childrenPadding: const EdgeInsets.symmetric(vertical: 10),
                 leading: Image.asset(
                   'assets/images/night.png',
                   scale: 6,
+                ),
+                trailing: Icon(
+                  Icons.expand_more,
+                  color: IconTheme.of(context).color,
                 ),
                 children: m.weathers.map((w) {
                   return Column(
@@ -107,8 +116,12 @@ class _HomeScreenState extends State<HomeScreen> {
                             DateFormat('').add_jm().format(
                                   w.date ?? DateTime.now(),
                                 ),
+                            style: theme.textTheme.bodyMedium,
                           ),
-                          Text('${w.temperature?.celsius?.round()}°C')
+                          Text(
+                            '${w.temperature?.celsius?.round()}°C',
+                            style: theme.textTheme.bodyMedium,
+                          ),
                         ],
                       ),
                       const SizedBox(
@@ -180,16 +193,16 @@ class _HomeScreenState extends State<HomeScreen> {
     return setUpMap.values.toList();
   }
 
-  List<Widget> _backgroundBlur() {
+  List<Widget> _backgroundBlur(ThemeState state) {
     return [
       Align(
         alignment: const AlignmentDirectional(3, -0.3),
         child: Container(
           width: HomeScreen._backgroundElemSize,
           height: HomeScreen._backgroundElemSize,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.deepPurple,
+            color: state.theme.getBlur().first,
           ),
         ),
       ),
@@ -198,9 +211,9 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           width: HomeScreen._backgroundElemSize,
           height: HomeScreen._backgroundElemSize,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: Colors.deepPurple,
+            color: state.theme.getBlur().first,
           ),
         ),
       ),
@@ -209,8 +222,8 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Container(
           width: HomeScreen._backgroundElemSize * 2,
           height: HomeScreen._backgroundElemSize,
-          decoration: const BoxDecoration(
-            color: Colors.orangeAccent,
+          decoration: BoxDecoration(
+            color: state.theme.getBlur().second,
           ),
         ),
       ),
@@ -227,8 +240,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final ThemeBloc themeBloc = BlocProvider.of<ThemeBloc>(context);
     final localization = context.localization();
-    final List<Widget> backgroundBlur = _backgroundBlur();
     final Widget frontData = BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
         if (state is WeatherSuccess) {
@@ -245,17 +258,27 @@ class _HomeScreenState extends State<HomeScreen> {
         }
       },
     );
+
+    final Widget actionButton = IconButton(
+        onPressed: () => themeBloc.add(ThemeUpdateEvent()),
+        icon: const Icon(Icons.sunny));
     return Scaffold(
       extendBodyBehindAppBar: true,
       body: Padding(
         padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
-        child: Stack(
-          children: [
-            ...backgroundBlur,
-            frontData,
-          ],
+        child: BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, state) {
+            return Stack(
+              children: [
+                ..._backgroundBlur(state),
+                frontData,
+              ],
+            );
+          },
         ),
       ),
+      floatingActionButton: actionButton,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
     );
   }
 }
