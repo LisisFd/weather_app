@@ -1,0 +1,8 @@
+{
+  "appName": "Метеорологично време",
+  "titleError": "Грешка",
+  "titleSunrise": "Изгрев",
+  "titleSunset": "Залез",
+  "titleTempMax": "Макс. темп",
+  "titleTempMin": "Мин. темп"
+}

@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/localization.dart';
 import 'package:app_main/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -226,6 +227,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = context.localization();
     final List<Widget> backgroundBlur = _backgroundBlur();
     final Widget frontData = BlocBuilder<WeatherBloc, WeatherState>(
       builder: (context, state) {
@@ -234,7 +236,7 @@ class _HomeScreenState extends State<HomeScreen> {
         } else if (state is WeatherFailure) {
           return Center(
               child: Text(
-            'Error :(',
+            localization.titleError,
             style: theme.textTheme.titleLarge
                 ?.copyWith(color: theme.colorScheme.error),
           ));

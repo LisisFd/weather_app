@@ -1,0 +1,8 @@
+{
+  "appName": "Погода",
+  "titleError": "Ошибка",
+  "titleSunrise": "Восход",
+  "titleSunset": "Закат",
+  "titleTempMax": "Макс. температура",
+  "titleTempMin": "Минимальная температура"
+}

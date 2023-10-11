@@ -1,0 +1,8 @@
+{
+  "appName": "天气",
+  "titleError": "错误",
+  "titleSunrise": "日出",
+  "titleSunset": "日落",
+  "titleTempMax": "最高温度",
+  "titleTempMin": "最低温度"
+}

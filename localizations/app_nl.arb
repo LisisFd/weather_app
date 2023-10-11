@@ -1,0 +1,8 @@
+{
+  "appName": "Weer",
+  "titleError": "Fout",
+  "titleSunrise": "zonsopkomst",
+  "titleSunset": "Zonsondergang",
+  "titleTempMax": "Maximale temperatuur",
+  "titleTempMin": "Min. temperatuur"
+}

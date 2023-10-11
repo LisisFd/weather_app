@@ -1,0 +1,8 @@
+{
+  "appName": "Clima",
+  "titleError": "Erro",
+  "titleSunrise": "Nascer do sol",
+  "titleSunset": "Pôr do sol",
+  "titleTempMax": "Temperatura máxima",
+  "titleTempMin": "Temperatura mínima"
+}

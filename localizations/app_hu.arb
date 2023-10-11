@@ -1,0 +1,8 @@
+{
+  "appName": "Időjárás",
+  "titleError": "Hiba",
+  "titleSunrise": "Napkelte",
+  "titleSunset": "Napnyugta",
+  "titleTempMax": "Max hőm",
+  "titleTempMin": "Min. hőmérséklet"
+}

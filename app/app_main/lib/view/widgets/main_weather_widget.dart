@@ -1,3 +1,4 @@
+import 'package:app_main/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:weather/weather.dart';
@@ -11,32 +12,38 @@ class MainWeatherWidget extends StatelessWidget {
       required String title,
       required String subtitle}) {
     final theme = Theme.of(context);
-    return Row(
-      children: [
-        image,
-        const SizedBox(
-          width: 12,
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              title,
-              style: theme.textTheme.labelMedium,
+    return Flexible(
+      child: Row(
+        children: [
+          Flexible(child: image),
+          const SizedBox(
+            width: 20,
+          ),
+          Flexible(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium,
+                ),
+                Text(
+                  subtitle,
+                  style: theme.textTheme.bodyLarge,
+                ),
+              ],
             ),
-            Text(
-              subtitle,
-              style: theme.textTheme.bodyLarge,
-            ),
-          ],
-        ),
-      ],
+          ),
+        ],
+      ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final localization = context.localization();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -99,7 +106,7 @@ class MainWeatherWidget extends StatelessWidget {
                 'assets/images/sun.png',
                 scale: 5,
               ),
-              title: 'Sunrise',
+              title: localization.titleSunrise,
               subtitle: DateFormat()
                   .add_jm()
                   .format(weather.sunrise ?? DateTime.now()),
@@ -110,7 +117,7 @@ class MainWeatherWidget extends StatelessWidget {
                 'assets/images/night.png',
                 scale: 5.5,
               ),
-              title: 'Sunset',
+              title: localization.titleSunset,
               subtitle: DateFormat()
                   .add_jm()
                   .format(weather.sunset ?? DateTime.now()),
@@ -132,7 +139,7 @@ class MainWeatherWidget extends StatelessWidget {
                 'assets/images/max_temp.png',
                 scale: 5.8,
               ),
-              title: 'Max Temp',
+              title: localization.titleTempMax,
               subtitle: '${weather.tempMax?.celsius?.round()}°C',
             ),
             _bodyElemWidget(
@@ -141,7 +148,7 @@ class MainWeatherWidget extends StatelessWidget {
                 'assets/images/min_temp.png',
                 scale: 5.5,
               ),
-              title: 'Min Temp',
+              title: localization.titleTempMin,
               subtitle: '${weather.tempMin?.celsius?.round()}°C',
             ),
           ],

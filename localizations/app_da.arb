@@ -1,0 +1,8 @@
+{
+  "appName": "Vejr",
+  "titleError": "Fejl",
+  "titleSunrise": "Solopgang",
+  "titleSunset": "Solnedgang",
+  "titleTempMax": "Max Temp",
+  "titleTempMin": "Min Temp"
+}

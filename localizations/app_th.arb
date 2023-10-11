@@ -1,0 +1,8 @@
+{
+  "appName": "สภาพอากาศ",
+  "titleError": "ข้อผิดพลาด",
+  "titleSunrise": "พระอาทิตย์ขึ้น",
+  "titleSunset": "พระอาทิตย์ตก",
+  "titleTempMax": "อุณหภูมิสูงสุด",
+  "titleTempMin": "อุณหภูมิต่ำสุด"
+}
