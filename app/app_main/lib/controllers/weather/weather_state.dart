@@ -13,8 +13,8 @@ class WeatherLoading extends WeatherState {}
 class WeatherFailure extends WeatherState {}
 
 class WeatherSuccess extends WeatherState {
-  final Weather weather;
-  final List<Weather> fiveDays;
+  final WeatherView weather;
+  final List<WeatherView> fiveDays;
   const WeatherSuccess(this.weather, this.fiveDays);
   @override
   List<Object?> get props => [weather];

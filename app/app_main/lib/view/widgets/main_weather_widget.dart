@@ -1,11 +1,11 @@
+import 'package:app_main/domain/domain.dart';
 import 'package:app_main/localization.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:weather/weather.dart';
 
 class MainWeatherWidget extends StatelessWidget {
-  final Weather weather;
-  const MainWeatherWidget({super.key, required this.weather});
+  final WeatherView weatherView;
+  const MainWeatherWidget({super.key, required this.weatherView});
   Widget _bodyElemWidget(
       {required BuildContext context,
       required Widget image,
@@ -44,6 +44,7 @@ class MainWeatherWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final localization = context.localization();
+    final weather = weatherView.weather;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -55,19 +56,12 @@ class MainWeatherWidget extends StatelessWidget {
           style: theme.textTheme.labelMedium,
         ),
         const SizedBox(
-          height: 8,
-        ),
-        Text(
-          'Good Morning',
-          style: theme.textTheme.titleSmall,
-        ),
-        const SizedBox(
           height: 16,
         ),
         Align(
           alignment: Alignment.center,
           child: Image.asset(
-            'assets/images/sunny.png',
+            weatherView.group.imageUrl,
             scale: 1.2,
           ),
         ),

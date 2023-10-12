@@ -1,15 +1,15 @@
 import 'dart:ui';
 
 import 'package:app_main/controllers/controllers.dart';
+import 'package:app_main/domain/domain.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/view/widgets/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:weather/weather.dart';
 
-///TODO: Theme provider. Setup repo.
+///TODO: Create workflow create page gitHub
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -74,8 +74,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _successState(BuildContext context, WeatherSuccess state) {
     final ThemeData theme = Theme.of(context);
-    final Weather weather = state.weather;
-    final List<Weather> fiveDays = state.fiveDays;
+    final WeatherView weather = state.weather;
+    final List<WeatherView> fiveDays = state.fiveDays;
     final List<_DateListModel> models = _getWeathers(fiveDays);
     const Widget padding = SizedBox(
       height: 10,
@@ -92,7 +92,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 childrenPadding: const EdgeInsets.symmetric(vertical: 10),
                 leading: Image.asset(
-                  'assets/images/night.png',
+                  m.weathers.first.group.imageUrl,
                   scale: 6,
                 ),
                 trailing: Icon(
@@ -109,17 +109,17 @@ class _HomeScreenState extends State<HomeScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Image.asset(
-                            'assets/images/night.png',
+                            w.group.imageUrl,
                             scale: 8,
                           ),
                           Text(
                             DateFormat('').add_jm().format(
-                                  w.date ?? DateTime.now(),
+                                  w.weather.date ?? DateTime.now(),
                                 ),
                             style: theme.textTheme.bodyMedium,
                           ),
                           Text(
-                            '${w.temperature?.celsius?.round()}°C',
+                            '${w.weather.temperature?.celsius?.round()}°C',
                             style: theme.textTheme.bodyMedium,
                           ),
                         ],
@@ -157,7 +157,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 child: SizedBox(
                   height: MediaQuery.of(context).size.height,
                   child: MainWeatherWidget(
-                    weather: weather,
+                    weatherView: weather,
                   ),
                 ),
               ),
@@ -172,11 +172,11 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  List<_DateListModel> _getWeathers(List<Weather> weathers) {
+  List<_DateListModel> _getWeathers(List<WeatherView> weathers) {
     DateFormat format = DateFormat('dd EEEE y');
     Map<DateTime, _DateListModel> setUpMap = {};
-    for (Weather w in weathers) {
-      DateTime? date = w.date;
+    for (WeatherView w in weathers) {
+      DateTime? date = w.weather.date;
       if (date == null) continue;
       date = DateTime(date.year, date.month, date.day);
       if (setUpMap.containsKey(date)) {
@@ -285,7 +285,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
 final class _DateListModel {
   final String title;
-  final List<Weather> weathers;
+  final List<WeatherView> weathers;
 
   _DateListModel({required this.title, this.weathers = const []});
 }

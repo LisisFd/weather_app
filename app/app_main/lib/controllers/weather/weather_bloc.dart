@@ -1,3 +1,4 @@
+import 'package:app_main/domain/domain.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,33 +12,48 @@ part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
   WeatherBloc() : super(WeatherInitial()) {
-    on<FetchWeather>((event, emit) async {
-      emit(WeatherLoading());
-      try {
-        String code = event.locale.languageCode;
-        Language language = _languageCode.entries
-            .firstWhere(
-              (element) => element.value == code,
-              orElse: () => _languageCode.entries.firstWhere(
-                (element) => element.key == Language.ENGLISH,
-              ),
-            )
-            .key;
-        WeatherFactory weatherFactory =
-            WeatherFactory(APIKEY, language: language);
+    on<FetchWeather>(_fetchWeather);
+  }
 
-        Position position = await _determinePosition();
-        double latitude = position.latitude;
-        double longitude = position.longitude;
-        Weather weather =
-            await weatherFactory.currentWeatherByLocation(latitude, longitude);
-        List<Weather> weathers =
-            await weatherFactory.fiveDayForecastByLocation(latitude, longitude);
-        emit(WeatherSuccess(weather, weathers));
-      } catch (e) {
-        emit(WeatherFailure());
+  void _fetchWeather(FetchWeather event, Emitter<WeatherState> emit) async {
+    emit(WeatherLoading());
+    try {
+      String code = event.locale.languageCode;
+      Language language = _languageCode.entries
+          .firstWhere(
+            (element) => element.value == code,
+            orElse: () => _languageCode.entries.firstWhere(
+              (element) => element.key == Language.ENGLISH,
+            ),
+          )
+          .key;
+      WeatherFactory weatherFactory =
+          WeatherFactory(APIKEY, language: language);
+
+      Position position = await _determinePosition();
+      double latitude = position.latitude;
+      double longitude = position.longitude;
+      Weather weather =
+          await weatherFactory.currentWeatherByLocation(latitude, longitude);
+      WeatherView weatherView = _convertToView(weather);
+      List<Weather> weathers =
+          await weatherFactory.fiveDayForecastByLocation(latitude, longitude);
+      List<WeatherView> weathersView = [];
+      for (var w in weathers) {
+        weathersView.add(_convertToView(w));
       }
-    });
+      emit(WeatherSuccess(weatherView, weathersView));
+    } catch (e) {
+      emit(WeatherFailure());
+    }
+  }
+
+  WeatherView _convertToView(Weather weather) {
+    WeatherView view = WeatherView(
+      group: WeatherGroups.getGroupById(weather.weatherConditionCode ?? 0),
+      weather: weather,
+    );
+    return view;
   }
 
   Future<Position> _determinePosition() async {
