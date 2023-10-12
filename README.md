@@ -1,16 +1,18 @@
 # weather_app
+Just an application to view the weather for the current day and the next 5 days.
+Supports 44 languages
 
-A new Flutter project.
+### [Preview](https://lisisfd.github.io/weather_app/)
 
-## Getting Started
+### GetStarted
+1. Run ./tools/build-localization.sh
+2. [Create apikey](https://openweathermap.org/)
+   * set your key into .env
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Stack
+1. [Flutter Bloc;](https://pub.dev/packages/flutter_bloc)
+2. [Geolocator;](https://pub.dev/packages/geolocator)
+3. [Weather API;](https://pub.dev/packages/weather)
+4. [Dotenv;](https://pub.dev/packages/flutter_dotenv)
+5. [Arb Translator;](https://pub.dev/packages/flutter_arb_translator)
+6. [Responsive Framework;](https://pub.dev/packages/responsive_framework)
