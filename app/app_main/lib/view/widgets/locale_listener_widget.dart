@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:intl/intl.dart';
-import 'package:intl/intl_standalone.dart';
 
 class LocaleListenerWidget extends StatefulWidget {
   final Locale defaultLocale;
@@ -32,7 +31,9 @@ class _LocaleListenerWidgetState extends State<LocaleListenerWidget>
 
   void _updateLocale() async {
     await initializeDateFormatting();
-    Intl.defaultLocale = await findSystemLocale();
+    if (mounted) {
+      Intl.defaultLocale = Localizations.localeOf(context).languageCode;
+    }
   }
 
   @override

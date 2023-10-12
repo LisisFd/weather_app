@@ -2,17 +2,21 @@ import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/localizations/generated/app_localizations.dart';
 import 'package:app_main/view/home/home_screen.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_web_frame/flutter_web_frame.dart';
+import 'package:responsive_framework/responsive_framework.dart';
 
 import 'view/widgets/widgets.dart';
 
 class MyApp extends StatelessWidget {
+  static const double _appWidth = 390.0;
   const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
+    Widget materialApp = BlocProvider(
       create: (context) => ThemeBloc(),
       child: BlocBuilder<ThemeBloc, ThemeState>(
         builder: (context, state) {
@@ -75,5 +79,17 @@ class MyApp extends StatelessWidget {
         },
       ),
     );
+    return kIsWeb
+        ? FlutterWebFrame(
+            builder: (context) {
+              var deviceWidth = MediaQuery.of(context).size.width;
+              return ResponsiveWrapper.builder(
+                Center(child: materialApp),
+                defaultScaleFactor: deviceWidth / _appWidth,
+              );
+            },
+            maximumSize: const Size(_appWidth, _appWidth * 2),
+          )
+        : materialApp;
   }
 }

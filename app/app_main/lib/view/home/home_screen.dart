@@ -14,7 +14,7 @@ class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
   static const _backgroundElemSize = 300.0;
-  static const _blurSigma = 100.0;
+  static const _blurSigma = 12.0;
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -196,7 +196,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<Widget> _backgroundBlur(ThemeState state) {
     return [
       Align(
-        alignment: const AlignmentDirectional(3, -0.3),
+        alignment: const AlignmentDirectional(0.7, -0.3),
         child: Container(
           width: HomeScreen._backgroundElemSize,
           height: HomeScreen._backgroundElemSize,
@@ -207,7 +207,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       Align(
-        alignment: const AlignmentDirectional(-3, -0.3),
+        alignment: const AlignmentDirectional(-0.7, -0.3),
         child: Container(
           width: HomeScreen._backgroundElemSize,
           height: HomeScreen._backgroundElemSize,
@@ -218,10 +218,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
       Align(
-        alignment: const AlignmentDirectional(0, -1.2),
+        alignment: const AlignmentDirectional(0, -0.85),
         child: Container(
-          width: HomeScreen._backgroundElemSize * 2,
-          height: HomeScreen._backgroundElemSize,
+          width: HomeScreen._backgroundElemSize,
+          height: HomeScreen._backgroundElemSize / 1.5,
           decoration: BoxDecoration(
             color: state.theme.getBlur().second,
           ),
@@ -229,9 +229,12 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       BackdropFilter(
         filter: ImageFilter.blur(
-            sigmaX: HomeScreen._blurSigma, sigmaY: HomeScreen._blurSigma),
-        child: const ColoredBox(
-          color: Colors.transparent,
+            sigmaX: 10, //.HomeScreen._blurSigma,
+            sigmaY: 100,
+            tileMode: TileMode.mirror),
+        child: const SizedBox(
+          width: double.maxFinite,
+          height: double.maxFinite,
         ),
       ),
     ];
@@ -264,18 +267,17 @@ class _HomeScreenState extends State<HomeScreen> {
         icon: const Icon(Icons.sunny));
     return Scaffold(
       extendBodyBehindAppBar: true,
-      body: Padding(
-        padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
-        child: BlocBuilder<ThemeBloc, ThemeState>(
-          builder: (context, state) {
-            return Stack(
-              children: [
-                ..._backgroundBlur(state),
-                frontData,
-              ],
-            );
-          },
-        ),
+      body: BlocBuilder<ThemeBloc, ThemeState>(
+        builder: (context, state) {
+          return Stack(
+            children: [
+              ..._backgroundBlur(state),
+              Padding(
+                  padding: const EdgeInsets.fromLTRB(40, 0, 40, 20),
+                  child: frontData),
+            ],
+          );
+        },
       ),
       floatingActionButton: actionButton,
       floatingActionButtonLocation: FloatingActionButtonLocation.endTop,
