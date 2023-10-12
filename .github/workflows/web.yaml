@@ -16,7 +16,7 @@ jobs:
             envkey_API_KEY: ${{ secrets.API_KEY }}
             directory: assets/
 
-      - uses: subosito/flutter-action@v3
+      - uses: subosito/flutter-action@v2
 
       - name: Install dependencies
         run: tools/build-localization.sh
