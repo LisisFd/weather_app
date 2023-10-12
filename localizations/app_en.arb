@@ -1,8 +1,0 @@
-{
-  "appName": "Weather",
-  "titleError": "Error",
-  "titleSunrise": "Sunrise",
-  "titleSunset": "Sunset",
-  "titleTempMax": "Max Temp",
-  "titleTempMin": "Min Temp"
-}
