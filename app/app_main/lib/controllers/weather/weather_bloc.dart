@@ -5,13 +5,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:weather/weather.dart';
 
-import '../../config/config.dart';
-
 part 'weather_event.dart';
 part 'weather_state.dart';
 
 class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
-  WeatherBloc() : super(WeatherInitial()) {
+  final String apikey;
+  WeatherBloc(this.apikey) : super(WeatherInitial()) {
     on<FetchWeather>(_fetchWeather);
   }
 
@@ -28,7 +27,7 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
           )
           .key;
       WeatherFactory weatherFactory =
-          WeatherFactory(APIKEY, language: language);
+          WeatherFactory(apikey, language: language);
 
       Position position = await _determinePosition();
       double latitude = position.latitude;

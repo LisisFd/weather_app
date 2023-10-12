@@ -21,6 +21,7 @@ dependencies:
   flutter_web_frame: ^1.0.0
   responsive_framework: ^0.2.0
   cupertino_icons: ^1.0.2
+  flutter_dotenv: ^5.1.0
 
 dev_dependencies:
   flutter_test:

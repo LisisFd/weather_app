@@ -1,3 +1,4 @@
+import 'package:app_main/app_main.dart';
 import 'package:app_main/controllers/controllers.dart';
 import 'package:app_main/localization.dart';
 import 'package:app_main/localizations/generated/app_localizations.dart';
@@ -72,7 +73,7 @@ class MyApp extends StatelessWidget {
               ],
               home: BlocProvider(
                 create: (context) {
-                  return WeatherBloc();
+                  return WeatherBloc(dotenv.env['API_KEY'] ?? '');
                 },
                 child: const LocaleListenerWidget(child: HomeScreen()),
               ));
